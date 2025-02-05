@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourism Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Tourism Dashboard</h1>
+
+    <!-- Most Visited Locations -->
+    <h2>Most Visited Locations</h2>
+    <div id="most-visited-chart"></div>
+    <script>
+        var locations = {{ most_visited|safe }};
+        var data = [{
+            x: locations.map(item => item.Location),
+            y: locations.map(item => item.Visitors),
+            type: 'bar'
+        }];
+        Plotly.newPlot('most-visited-chart', data);
+    </script>
+
+    <!-- Highest Revenue Categories -->
+    <h2>Highest Revenue Categories</h2>
+    <div id="revenue-categories-chart"></div>
+    <script>
+        var categories = {{ highest_revenue_categories|safe }};
+        var data = [{
+            labels: categories.map(item => item._id),
+            values: categories.map(item => item.Total_Revenue),
+            type: 'pie'
+        }];
+        Plotly.newPlot('revenue-categories-chart', data);
+    </script>
+
+    <!-- Average Ratings by Country -->
+    <h2>Average Ratings by Country</h2>
+    <div id="ratings-by-country-chart"></div>
+    <script>
+        var ratings = {{ average_ratings_by_country|safe }};
+        var data = [{
+            x: ratings.map(item => item._id),
+            y: ratings.map(item => item.Average_Rating),
+            type: 'bar'
+        }];
+        Plotly.newPlot('ratings-by-country-chart', data);
+    </script>
+</body>
+</html>
