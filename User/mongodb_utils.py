@@ -31,29 +31,25 @@ def get_most_visited_locations(limit=10):
 def get_highest_revenue_categories():
     """Get total revenue by category."""
     pipeline = [
+        {"$addFields": {"Revenue": {"$toDouble": "$Revenue"}}},  # Convert Revenue to number
         {"$match": {"Revenue": {"$gt": 0}}},  # Ignore zero or missing revenue
         {"$group": {"_id": "$Category", "Total_Revenue": {"$sum": "$Revenue"}}},
         {"$sort": {"Total_Revenue": -1}}
     ]
     results = list(collection.aggregate(pipeline))
 
-    # Convert ObjectId to string
-    for item in results:
-        item["_id"] = str(item["_id"])
-
     return results
+
 
 
 def get_average_ratings_by_country():
     """Get average ratings by country."""
     pipeline = [
+        {"$addFields": {"Rating": {"$toDouble": "$Rating"}}},  # Convert Rating to number
         {"$group": {"_id": "$Country", "Average_Rating": {"$avg": "$Rating"}}},
         {"$sort": {"Average_Rating": -1}}
     ]
     results = list(collection.aggregate(pipeline))
 
-    # Convert ObjectId to string
-    for item in results:
-        item["_id"] = str(item["_id"])
-
     return results
+
